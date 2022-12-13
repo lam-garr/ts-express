@@ -8,4 +8,4 @@ router.get("/", get_index);
 
 router.get("/other", get_other)
 
-module.exports = router;
+export default router;

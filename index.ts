@@ -4,7 +4,7 @@ dotenv.config();
 
 const app: Express = express();
 
-import {router as indexRouter} from "./routes/index";
+import indexRouter from "./routes/index";
 
 app.use("/", indexRouter);
 

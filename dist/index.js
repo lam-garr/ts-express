@@ -30,8 +30,10 @@ const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const app = (0, express_1.default)();
+const index_1 = __importDefault(require("./routes/index"));
+app.use("/", index_1.default);
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send(`Hello ${process.env.USER}`);
 });
 app.listen(process.env.PORT, () => {
     console.log(`Listening on port ${process.env.PORT}`);

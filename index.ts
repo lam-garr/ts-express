@@ -1,12 +1,18 @@
 import express, {Express, Request, Response} from "express";
+import session from "express-session";
+import passport from "passport";
+import passportLocal from "passport-local";
+import mongoose from "mongoose";
 import * as dotenv from "dotenv";
+import indexRouter from "./routes/index";
 dotenv.config();
+
+const LocalStrategy = passportLocal.Strategy;
 
 const app: Express = express();
 
 app.use(express.json());
 
-import indexRouter from "./routes/index";
 
 app.use("/", indexRouter);
 

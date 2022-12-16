@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
 import indexRouter from "./routes/index";
+import User from "./models/users";
+import userInterface from "interfaces";
 dotenv.config();
 
 const LocalStrategy = passportLocal.Strategy;

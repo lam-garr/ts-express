@@ -31,7 +31,7 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(session({secret: `${process.env.SECRET}`, resave: false, saveUninitialized: true}));
-app.use(passport.initialize());
+
 app.use(passport.session());
 
 //passport
@@ -64,7 +64,7 @@ passport.deserializeUser(function(id, done){
         done(err, user);
     });
 });
-
+app.use(passport.initialize());
 app.use("/", indexRouter);
 
 app.listen(process.env.PORT, ()=>{

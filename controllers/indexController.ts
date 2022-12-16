@@ -21,7 +21,7 @@ export async function post_sign_up(req: Request, res: Response, next: NextFuncti
         if(err){
             return next(err);
         }
-        res.json({signup:"success"})
+        res.send("success")
     })
 }
 
@@ -32,11 +32,11 @@ export function log_in(req:Request, res: Response, next: NextFunction){
         }
 
         if(!user){
-            return res.json({message:"user not found"});
+            return res.send("user not found");
         }
 
         if(info){
-            return res.json({message:`${info.message}`});
+            return res.send(`${info.message}`);
         }
 
         req.login(user, (err)=>{
@@ -44,7 +44,7 @@ export function log_in(req:Request, res: Response, next: NextFunction){
                 return next(err);
             }
 
-            return res.json({message:`user logged in as ${user.id}`})
+            return res.send(`user logged in as ${user.id}`)
         })
     })(req, res, next);
 }
@@ -54,6 +54,6 @@ export function log_out(req: Request, res: Response, next: NextFunction){
         if(err){
             return next(err);
         }
-        res.json({message:"logged out"})
+        res.send("logged out")
     })
 }

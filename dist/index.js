@@ -27,14 +27,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const express_session_1 = __importDefault(require("express-session"));
+const passport_1 = __importDefault(require("passport"));
+const passport_local_1 = __importDefault(require("passport-local"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv = __importStar(require("dotenv"));
-dotenv.config();
-const app = (0, express_1.default)();
 const index_1 = __importDefault(require("./routes/index"));
-app.use("/", index_1.default);
-app.get("/", (req, res) => {
-    res.send(`Hello ${process.env.USER}`);
+const users_1 = __importDefault(require("./models/users"));
+dotenv.config();
+const LocalStrategy = passport_local_1.default.Strategy;
+const mongoDB = `${process.env.MONGODB}`;
+mongoose_1.default.connect(mongoDB);
+const db = mongoose_1.default.connection;
+db.on("error", console.log.bind(console, "db connection error"));
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: false }));
+app.use((0, express_session_1.default)({ secret: `${process.env.SECRET}`, resave: false, saveUninitialized: true }));
+app.use(passport_1.default.session());
+//passport
+passport_1.default.use(new LocalStrategy((username, password, done) => {
+    users_1.default.findOne({ username: username }, (err, user) => {
+        if (err) {
+            return done(err);
+        }
+        if (!user) {
+            return done(null, false);
+        }
+        bcrypt_1.default.compare(password, user.password, (err, res) => {
+            if (res) {
+                return done(null, user);
+            }
+            else {
+                return done(null, false);
+            }
+        });
+    });
+}));
+passport_1.default.serializeUser(function (user, done) {
+    done(null, user._id);
 });
+passport_1.default.deserializeUser(function (id, done) {
+    users_1.default.findById(id, function (err, user) {
+        done(err, user);
+    });
+});
+app.use(passport_1.default.initialize());
+app.use("/", index_1.default);
 app.listen(process.env.PORT, () => {
     console.log(`Listening on port ${process.env.PORT}`);
 });

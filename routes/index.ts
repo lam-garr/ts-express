@@ -8,10 +8,10 @@ router.get("/", get_index);
 
 router.get("/other", get_other)
 
-router.post('sign-up', post_sign_up);
+router.post('/sign-up', post_sign_up);
 
-router.post('log-in', log_in);
+router.post('/log-in', log_in);
 
-router.get('log-out', log_out)
+router.get('/log-out', log_out)
 
 export default router;
